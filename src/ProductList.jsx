@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import './ProductList.css'
+import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem';
+import { addItem } from './CartSlice';
+
 function ProductList({ onHomeClick }) {
+    const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items);
+    
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
 
@@ -237,6 +243,24 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         onHomeClick();
     };
+     const isInCart = (productName) => {
+        return cartItems.some(item => item.name === productName)
+    }
+    //Esto se va a ejecutar primero ya que no se tiene ningun producto pero luego de que el item se haya agregado al carrito
+    //Va a devolver true en isInCart y por ende nunca mas se va a poder agregar nuevamente 
+    const handleAddToCart = (product) => {
+        if (isInCart(product.name)) return;
+
+        dispatch(addItem(
+            {
+                name : product.name,
+                image: product.image,
+                cost : product.cost,
+                quantity: 1,
+            }
+        )); 
+        
+    };
 
     const handleCartClick = (e) => {
         e.preventDefault();
@@ -247,7 +271,6 @@ function ProductList({ onHomeClick }) {
         setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
         setShowCart(false); // Hide the cart when navigating to About Us
     };
-
     const handleContinueShopping = (e) => {
         e.preventDefault();
         setShowCart(false);
@@ -278,13 +301,17 @@ function ProductList({ onHomeClick }) {
                     
                     {plantsArray.map( (category, index) => {
                         return (
-                            <div key={index} className="plantname_heading">
+                            <div key={index} className=''>
                                 <h2 className='plant_heading'>{category.category}</h2>
                                 <div className="product-list">
                                     {category.plants.map((nameplant,idx) => {
                                         return(
-                                            <div key={idx} className='product-card'>
-                                                <h3>{nameplant.name}</h3>
+                                            <div key={idx} className={`product-card ${isInCart(nameplant.name) ? "sale" : ""}`}>
+                                                <h3 className='product-title'>{nameplant.name}</h3>
+                                                <img src={nameplant.image} className='product-image' alt="" />
+                                                <h3 className='product-price'>{nameplant.cost}</h3>
+                                                <h3 className=''>{nameplant.description}</h3>
+                                                <button className='product-button' onClick={() => handleAddToCart(nameplant)}>Added to Cart</button>
                                             </div>
                                         )
                                     })}
