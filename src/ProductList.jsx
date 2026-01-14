@@ -256,6 +256,7 @@ function ProductList({ onHomeClick }) {
                 name : product.name,
                 image: product.image,
                 cost : product.cost,
+                //Aqui defino la propiedad de la cantidad
                 quantity: 1,
             }
         )); 

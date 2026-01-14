@@ -15,8 +15,21 @@ export const CartSlice = createSlice({
         item.name !== action.payload
       );
     },
-    updateQuantity: (state, action) => {
 
+    //Al usar el arrow fuction con llave, debe retornar algo 
+    updateQuantity: (state, action) => {
+      const { name, amount } = action.payload;
+      const item = state.items.find( (item) =>{
+      if (item.name === name) {
+        return true
+      }
+      else
+        return false
+      })
+      
+      if (item) {
+        item.quantity += amount
+      }
     
     },
   },
