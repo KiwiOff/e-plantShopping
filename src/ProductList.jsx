@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import './ProductList.css'
 import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem';
@@ -9,7 +9,7 @@ function ProductList({ onHomeClick }) {
     const cartItems = useSelector(state => state.cart.items);
     
     const [showCart, setShowCart] = useState(false);
-    const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    
 
     const plantsArray = [
         {
@@ -269,11 +269,10 @@ function ProductList({ onHomeClick }) {
     };
     const handlePlantsClick = (e) => {
         e.preventDefault();
-        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
+        
         setShowCart(false); // Hide the cart when navigating to About Us
     };
-    const handleContinueShopping = (e) => {
-        e.preventDefault();
+    const handleContinueShopping = () => {
         setShowCart(false);
     };
     return (
